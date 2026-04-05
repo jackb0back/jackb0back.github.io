@@ -1,13 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Jackboback - Personal Website and Portfolio">
+    <title>Jackboback | Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@hackernoon/pixel-icon-library@latest/fonts/iconfont.css">
+    <link rel="icon" type="image/png" href="/assets/icon/profile.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!---->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 </head>
+
 <body>
-    <script defer>
-      window.location.href = "https://jackboback.dev/";
-    </script>
+    <audio id="startup-sound" src="/assets/sound/startup.mp3" preload="auto"></audio>
+    <audio id="bg-music" src="/assets/sound/music.mp3" loop preload="auto"></audio>
+
+    <nav class="navbar">
+        <a href="#home" class="nav-brand">Jackboback.dev</a>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#socials">Socials</a></li>
+        </ul>
+    </nav>
+
+    <div id="pages-container">
+        <!-- HOME PAGE -->
+        <main id="home" class="container fade-up page-section" style="display: block;">
+            <section class="hero" style="margin-top: 5vh;">
+                <h2 style="font-size: 1.5rem; color: var(--accent-primary);">> WHOAMI</h2>
+                <p
+                    style="color: var(--accent-primary); font-family: 'retro', sans-serif; font-weight: 600; margin-bottom: 0.5rem;">
+                    Hi, I'm</p>
+                <h1>JackBoback.<br><span style="font-size: 0.7em;">I build things.</span></h1>
+                <p class="delay-1 fade-up">
+                    I'm an <span style="letter-spacing: 0.05em;"><b>18</b></span> year old programmer, I enjoy frontend
+                    and backend
+                    web development, making games, and I'm interested in mixed reality, Linux, AI research, and machine
+                    learning.
+                </p>
+                <p class="delay-2 fade-up" style="margin-bottom: 5px;"><i>Take a look around</i></p>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;" class="delay-3 fade-up">
+                    <a href="#projects" class="btn btn-primary">Projects</a>
+                    <a href="#blog" class="btn btn-outline">Blog</a>
+                    <a href="#socials" class="btn btn-outline">Socials</a>
+                </div>
+            </section>
+
+            <section class="stats-scoreboard delay-3 fade-up" style="margin-top: 6rem;">
+                <h2 style="font-size: 1.5rem; color: var(--accent-primary);">> SYSTEM_STATS</h2>
+                <div class="glass-card" style="padding: 1.5rem; max-width: 600px;">
+                    <div class="stats" style="display: grid; gap: 1rem;">
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">SITE_VIEWS</span>
+                            <span id="stat-site-views" style="color: var(--accent-primary);">...</span>
+                        </div>
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">TOTAL_VIEWS</span>
+                            <span id="stat-total-views" style="color: var(--accent-primary);">...</span>
+                        </div>
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">DAYS_SINCE_UPDATE</span>
+                            <span id="stat-days-update" style="color: var(--accent-primary);">...</span>
+                        </div>
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">DAYS_SINCE_BLOG_POST</span>
+                            <span id="stat-days-blog" style="color: var(--accent-primary);">...</span>
+                        </div>
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">DAYS_SINCE_PROJECT_UPDATE</span>
+                            <span id="stat-days-project" style="color: var(--accent-primary);">...</span>
+                        </div>
+                        <div class="site-stat"
+                            style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">DAYS_TILL_$USER.BIRTHDAY</span>
+                            <span id="stat-days-bday" style="color: var(--accent-primary);">...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ABOUT PAGE -->
+        <main id="about" class="container fade-up page-section" style="display: none;">
+            <h2>> WHOAMI</h2>
+            <div class="about-layout">
+                <div id="about-me" class="glass">
+                    <fieldset>
+                        <legend>
+                            <h2 style="margin: 5px;">About me</h2>
+                        </legend>
+                        <p>
+                            My name is Jackson and I'm a highschool student who's interested in computer programming and
+                            graphic design, and this is my website which was registered in 2022.
+                        </p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <h2 style="margin: 5px;">A Timeline</h2>
+                        </legend>
+                        <p>
+                            I've been coding since 6th grade when I was 12, and even before that I used to make games on
+                            the
+                            popular kids programming language <a
+                                href="javascript:window.open('https://scratch.mit.edu/')">scratch</a>.
+                            <br> I didn't start using O.O.P (Object Oriented Programming language) till 6th grade when I
+                            started learning Javascript, My first projects consisted solely of Javascript bookmarklets
+                            which
+                            where snippets of code that could be ran by clicking on a bookmark, one of most memorable
+                            was
+                            called “Super Client” a draggable GUI that had a list of controls where a user would press a
+                            key
+                            and it would run another bookmarklet. It was very inefficient and was very buggy but, I
+                            would
+                            say it was what started my programming journey.
+                            <br> Over the years I would work on several iterations of Super Client till I eventually got
+                            into web development where I started learning HTML and bits of CSS, my first websites looked
+                            horrible they consisted of brightly colored shapes and the default text one of these was
+                            called
+                            <a href="javascript:window.open('https://8xx0z.csb.app/')">Weblet Launcher</a>, an unblocked
+                            games website I made so that me and my friends could play unblocked games during school, it
+                            sucked, but it worked.
+                        </p><br>
+                        <p> Shortly after I re-branded it to <a
+                                href="javascript:window.open('https://oyzqh.csb.app/')">OASIS</a> based on my favorite
+                            movie: “Ready Player One”, The website went over a few iterations but a while ago I updated
+                            it
+                            because there were a lot of people that still used it even though my school had long blocked
+                            it.
+                            After my school blocked OASIS I worked on a new version: “OASIS Offline” which did not have
+                            a
+                            website and was instead a folder of HTML files that could be ran as a website, It was a hit
+                            lots
+                            of people at my school would use it but it only came to a close when my school forced my to
+                            delete it as I had decided to host the download on my SCHOOL GOOGLE DRIVE which was not a
+                            smart
+                            move, i'm sure there's a few copies floating around somewhere but I don't feel like looking
+                            for
+                            one.
+                        </p>
+                        <br>
+                        <p>
+                            OASIS Offline was the seed for multiple other OASIS projects usually with a similar concept,
+                            many of which were not released/finished. That brings us to today, our (somewhat) latest
+                            project
+                            <a href="javascript:window.open('http://oasis--x.rf.gd/?i=1')">OASIS X</a> that me and my
+                            friend
+                            <a href="javascript:window.open('https://jerrycodes.org/')">Oliver</a> worked on together.
+                            It
+                            had a lot of work put into it but flopped as it was released unfinished and has a lot of
+                            missing
+                            features and bugs. More recently I've been working on another which (hopefully) should
+                            outperform the last.
+                        </p>
+                    </fieldset>
+                </div>
+
+                <section id="skills-section" class="delay-1 fade-up">
+                    <h3
+                        style="font-family: 'Hyperspace', sans-serif; font-size: 1.5rem; color: var(--text-primary); text-shadow: 0 0 8px var(--text-primary); margin-bottom: 1.5rem; letter-spacing: 2px;">
+                        > SKILLS</h3>
+
+                    <div class="grid grid-cols-2">
+                        <article class="glass-card">
+                            <h4
+                                style="font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: var(--accent-primary); margin-bottom: 1.5rem; text-shadow: 0 0 5px var(--accent-primary);">
+                                Languages</h4>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/js.png" width="14" height="14" alt="JavaScript"
+                                        style="image-rendering: pixelated;"> JavaScript
+                                </span>
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/2945099.webp" width="14" height="14" alt="Python/C++"
+                                        style="image-rendering: pixelated;"> Python / C++
+                                </span>
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/cs.png" width="14" height="14" alt="C#"
+                                        style="image-rendering: pixelated;"> C#
+                                </span>
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/lua.png" width="14" height="14" alt="Lua"
+                                        style="image-rendering: pixelated;"> Lua
+                                </span>
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/html.png" width="14" height="14" alt="HTML"
+                                        style="image-rendering: pixelated;"> HTML
+                                </span>
+                                <span class="tag"
+                                    style="display: flex; align-items: center; gap: 0.5rem; padding-left: 0.5rem;">
+                                    <img src="/assets/icon/css.png" width="14" height="14" alt="CSS"
+                                        style="image-rendering: pixelated;"> CSS
+                                </span>
+                            </div>
+                        </article>
+                        <article class="glass-card">
+                            <h4
+                                style="font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: var(--accent-secondary); margin-bottom: 1.5rem; text-shadow: 0 0 5px var(--accent-secondary);">
+                                Tools & Tech</h4>
+                            <div>
+                                <span class="tag">Linux</span>
+                                <span class="tag">React</span>
+                                <span class="tag">Node.js</span>
+                                <span class="tag">Git</span>
+                                <span class="tag">Docker</span>
+                                <span class="tag">Unity / GDScript</span>
+                                <span class="tag">Machine Learning</span>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- PROJECTS PAGE -->
+        <main id="projects" class="container fade-up page-section" style="display: none;">
+            <h2>> Featured Projects</h2>
+            <p>Check out some of my projects</p>
+
+            <div id="projects-grid" class="grid grid-cols-2 delay-1 fade-up">
+                <!-- Projects will be injected here dynamically -->
+            </div>
+
+            <template id="template-project">
+                <article class="glass-card">
+                    <div class="proj-media"
+                        style="margin-bottom: 1rem; width: 100%; position: relative; display: none; border-radius: 4px; overflow: hidden; height: 200px; background: rgba(0,0,0,0.2);">
+                        <img class="proj-carousel-img"
+                            style="width: 100%; height: 100%; object-fit: cover; display: block;" src=""
+                            alt="Project Image" />
+                        <button class="carousel-btn prev-btn"><i class="hn hn-angle-left-solid"></i></button>
+                        <button class="carousel-btn next-btn"><i class="hn hn-angle-right-solid"></i></button>
+                    </div>
+                    <h3 class="proj-tit" style="font-family: 'Outfit'; margin-bottom: 0.5rem;"></h3>
+                    <div class="proj-desc" style="font-size: 1rem; margin-bottom: 1rem; line-height: 1.4;"></div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Added: <span class="proj-date"></span>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="#" class="btn btn-outline proj-view tag" style="text-decoration: none;"
+                            target="_blank">View</a>
+                        <a href="#" class="btn btn-primary proj-download tag" style="text-decoration: none;"
+                            target="_blank">Download</a>
+                    </div>
+                </article>
+            </template>
+        </main>
+
+        <!-- BLOG PAGE -->
+        <main id="blog" class="container fade-up page-section" style="display: none;">
+            <h2>> Blog</h2>
+            <p>I post (occasionally) project updates, thoughts, and other things I find interesting.</p>
+
+            <div id="blog-grid" class="grid delay-1 fade-up" style="max-width: 800px;">
+                <!-- Blog posts will be injected here dynamically -->
+            </div>
+
+            <template id="template-blog">
+                <article class="glass-card"
+                    style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+                    <span class="blog-date"
+                        style="color: var(--accent-primary); font-size: 0.875rem; font-weight: 600;"></span>
+                    <h3 class="blog-tit" style="font-family: 'Outfit'; font-size: 1.5rem;"></h3>
+                    <div class="blog-cont" style="font-size: 1rem; margin-bottom: 0; line-height: 1.6;"></div>
+                </article>
+            </template>
+        </main>
+
+        <!-- SOCIALS PAGE -->
+        <main id="socials" class="container fade-up page-section"
+            style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center;">
+            <div
+                style="width: 120px; height: 120px; background: var(--glass-bg); border: 2px solid var(--accent-primary); box-shadow: 4px 4px 0px var(--accent-primary); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <img src="/assets/icon/profile.png" alt="Jackboback"
+                    style="width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated;">
+            </div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Jackboback</h1>
+            <p style="margin-bottom: 3rem;">Connect with me!</p>
+
+            <div style="width: 100%; max-width: 400px;" class="delay-1 fade-up">
+                <a href="https://github.com/jackboback" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <i class="hn hn-github" style="font-size: 1.2rem; margin-right: 12px;"></i> GitHub (@jackb0back)
+                </a>
+                <a href="https://discord.com/users/835677153022312478" target="_blank" rel="noopener noreferrer"
+                    class="social-link">
+                    <i class="hn hn-discord" style="font-size: 1.2rem; margin-right: 12px;"></i> Discord (@jackboback)
+                </a>
+                <a href="https://twitter.com/jackb0back" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <i class="hn hn-twitter" style="font-size: 1.2rem; margin-right: 12px;"></i> Twitter (@Jackboback_)
+                </a>
+                <a href="https://www.youtube.com/@jackboback350" target="_blank" rel="noopener noreferrer"
+                    class="social-link">
+                    <i class="hn hn-youtube" style="font-size: 1.2rem; margin-right: 12px;"></i> Youtube
+                    (@jackboback350)
+                </a>
+                <a href="https://jackboback.itch.io/" target="_blank" rel="noopener noreferrer" class="social-link">
+                    <i class="hn hn-gaming" style="font-size: 1.2rem; margin-right: 12px;"></i> Itch.io (@jackboback)
+                </a>
+                <a href="mailto:jshouse310@gmail.com" class="social-link">
+                    <i class="hn hn-envelope" style="font-size: 1.2rem; margin-right: 12px;"></i> Email
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/networking.js"></script>
+    <script src="/js/main.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,424 @@
+@font-face {
+  font-family: 'Hyperspace';
+  src: url('/assets/HyperspaceBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'retro';
+  src: url('/assets/retro-font.ttf') format('truetype');
+}
+
+:root {
+  --bg-color: #000000;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --accent-primary: #00ffff;
+  /* Neon cyan */
+  --accent-secondary: #ff0055;
+  /* Neon pink */
+  --glass-bg: rgba(5, 5, 5, 0.85);
+  /* Solid dark */
+  --glass-border: #333333;
+}
+
+a {
+  color: var(--accent-primary);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#space {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+body {
+  font-family: 'retro', monospace;
+  font-size: 12px;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.8;
+  overflow-x: hidden;
+  letter-spacing: 0.05em;
+  word-spacing: 0.3em;
+  /* Forces spaces between words even if font space char is broken */
+}
+
+/* Background blob effects (hidden for arcade theme) */
+.bg-blob {
+  display: none;
+}
+
+/* Nav styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: var(--glass-bg);
+  border-bottom: 2px solid var(--glass-border);
+  transition: padding 0.3s ease;
+}
+
+.nav-brand {
+  font-family: 'Hyperspace', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  text-shadow: 0 0 8px var(--text-primary);
+  letter-spacing: 2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: 'retro', monospace;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent-primary);
+  text-shadow: 0 0 5px var(--accent-primary);
+}
+
+.nav-links a::after {
+  display: none;
+  /* Removed underline animation for retro feel */
+}
+
+.mobile-nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  text-shadow: 0 0 5px var(--accent-primary);
+}
+
+/* Main Layout */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 4rem;
+  min-height: 100vh;
+}
+
+/* Typography elements */
+h1 {
+  font-family: 'Hyperspace', sans-serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  text-shadow: 0 0 10px var(--text-primary);
+  overflow-wrap: break-word;
+  letter-spacing: 3px;
+}
+
+h2 {
+  font-family: 'Hyperspace', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 8px var(--text-primary);
+  letter-spacing: 2px;
+}
+
+p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 60ch;
+  margin-bottom: 2rem;
+}
+
+/* Card classes */
+.glass-card {
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 0;
+  padding: 2rem;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--text-primary);
+  box-shadow: 4px 4px 0px var(--glass-border);
+}
+
+/* Grids */
+.grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Tags/Badges */
+.tag {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0;
+  font-size: 0.6rem;
+  font-family: 'retro', monospace;
+  background: #111;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0;
+  font-family: 'retro', monospace;
+  font-size: 0.7rem;
+  text-decoration: none;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  border: 2px solid var(--text-primary);
+  background: #000;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.btn-primary {
+  border-color: var(--text-primary);
+  box-shadow: 4px 4px 0px var(--accent-primary);
+}
+
+.btn-primary:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--accent-primary);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.btn-outline {
+  border-color: var(--text-secondary);
+  color: var(--text-secondary);
+  box-shadow: 4px 4px 0px var(--glass-border);
+}
+
+.btn-outline:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+/* Animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUpAnim 0.8s forwards ease-out;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.delay-3 {
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeUpAnim {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Media Queries */
+@media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: var(--bg-color);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid var(--glass-border);
+  }
+
+  .nav-links.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+/* Page Specific: Projects */
+.project-img-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #111;
+  border-radius: 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'retro', monospace;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  text-transform: uppercase;
+}
+
+/* Page Specific: Socials */
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  border-radius: 0;
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: 'retro', monospace;
+  font-size: 0.8rem;
+  border: 2px solid var(--glass-border);
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.social-link:hover {
+  background: #000;
+  transform: translate(-4px, -4px);
+  border-color: var(--accent-primary);
+  box-shadow: 4px 4px 0px var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+
+/* Site stats */
+
+.site-stat {
+  font-size: 1rem;
+}
+
+/* Carousel Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--accent-primary);
+  cursor: pointer;
+  display: none;
+  padding: 10px;
+  font-size: 2rem;
+  transition: all 0.2s;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-btn:hover {
+  color: var(--accent-secondary);
+  text-shadow: 0 0 10px var(--accent-secondary);
+}
+
+.prev-btn {
+  left: 0;
+}
+
+.next-btn {
+  right: 0;
+}
+
+/* Blog */
+.blog-cont h1 {
+  font-size: 2rem;
+}
+
+.blog-cont h2 {
+  font-size: 1.5rem;
+}
+
+.blog-cont h3 {
+  font-size: 1.2rem;
+}
+
+.blog-cont p {
+  font-size: 1rem;
+}
+
+/* About Layout */
+.about-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .about-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  #about-me {
+    flex: 1;
+  }
+  #skills-section {
+    width: 335px;
+    flex-shrink: 0;
+  }
+}
+
+/* About me fieldset tweaks */
+fieldset {
+  padding: 1.5rem;
+  padding-top: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+legend {
+  padding: 0 10px;
+}

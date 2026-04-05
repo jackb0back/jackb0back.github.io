@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dev: Project Poster</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body style="padding: 2rem; background: var(--bg-color); color: var(--text-primary); font-family: 'Inter', sans-serif;">
+    <div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 2rem; color: var(--accent-primary);">> CREATE PROJECT</h2>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Dev Password</label>
+            <input type="text" id="dev-password"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Title</label>
+            <input type="text" id="post-title"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Description (HTML
+                allowed)</label>
+            <textarea id="post-desc" rows="5"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; resize: vertical;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Image URLs (comma
+                separated)</label>
+            <textarea id="post-imgs" rows="3" placeholder="https://..., https://..."
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; resize: vertical;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Download Link</label>
+            <input type="text" id="post-download"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">View Link</label>
+            <input type="text" id="post-view"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <button id="submit-btn" class="btn btn-outline" style="width: 100%;">Create Project</button>
+        <p id="status-msg" style="margin-top: 1rem; color: var(--accent-primary);"></p>
+    </div>
+
+    <!-- Inject MasterDBRequest inline from networking.js to avoid triggering global code -->
+    <script>
+        const GAS_url = "https://script.google.com/macros/s/AKfycbxL5el119b_k_9jMJwuxfLRuBuU5ejLYM_jXUWRC4rlegAHjJMA9S114iQ2xYglt-WT7Q/exec";
+        class MasterDBRequest {
+            constructor(route, body) {
+                this.route = route;
+                this.masterDB = GAS_url;
+                this.requestBody = body;
+                if (typeof this.requestBody == "object") this.requestBody = JSON.stringify(this.requestBody);
+            }
+            async send() {
+                this.response = await new Promise(async (resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append("path", this.route);
+                    formData.append("body", this.requestBody);
+                    fetch(this.masterDB, { method: 'POST', body: formData })
+                        .then(response => response.json())
+                        .then(result => resolve(result))
+                        .catch(err => reject(err));
+                });
+                return this.response;
+            }
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const password = document.getElementById('dev-password').value;
+            const title = document.getElementById('post-title').value;
+            const desc = document.getElementById('post-desc').value;
+            const imgsRaw = document.getElementById('post-imgs').value;
+            const downloadLink = document.getElementById('post-download').value;
+            const viewLink = document.getElementById('post-view').value;
+            // Format to mm/dd/yyyy manually to guarantee padding
+            const d = new Date();
+            const dateStr = [
+                (d.getMonth() + 1).toString().padStart(2, '0'),
+                d.getDate().toString().padStart(2, '0'),
+                d.getFullYear()
+            ].join('/');
+
+            if (!password || !title || !desc) {
+                alert("Password, Title, and Description are required!");
+                return;
+            }
+
+            let imgs = imgsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            let imgData = "";
+            if (imgs.length === 1) imgData = imgs[0];
+            else if (imgs.length > 1) imgData = imgs;
+
+            const projObj = {
+                name: title,
+                desc: desc,
+                view: viewLink || null,
+                download: downloadLink || null,
+                img: imgData,
+                date: dateStr,
+                _id: "P" + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+
+            const req = new MasterDBRequest("addPost", {
+                password: password,
+                type: "project",
+                data: JSON.stringify(projObj)
+            });
+
+            document.getElementById('status-msg').textContent = "Posting...";
+            try {
+                const res = await req.send();
+                if (res.ok) {
+                    document.getElementById('status-msg').textContent = "Success!";
+                    document.getElementById('post-title').value = "";
+                    document.getElementById('post-desc').value = "";
+                    document.getElementById('post-imgs').value = "";
+                    document.getElementById('post-download').value = "";
+                    document.getElementById('post-view').value = "";
+                } else {
+                    document.getElementById('status-msg').textContent = "Failed: " + (res.error || "Unknown Error");
+                }
+            } catch (e) {
+                document.getElementById('status-msg').textContent = "Error: " + e.message;
+            }
+        });
+    </script>
+</body>
+
+</html>

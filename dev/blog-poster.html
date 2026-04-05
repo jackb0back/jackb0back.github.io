@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dev: Blog Poster</title>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .ql-toolbar.ql-snow {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: var(--glass-border);
+        }
+
+        .ql-container.ql-snow {
+            border-color: var(--glass-border);
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--text-primary);
+        }
+
+        .ql-snow .ql-stroke {
+            stroke: var(--text-secondary);
+        }
+
+        .ql-snow .ql-fill {
+            fill: var(--text-secondary);
+        }
+
+        .ql-snow .ql-picker {
+            color: var(--text-secondary);
+        }
+
+        .ql-snow .ql-picker-options {
+            background: rgba(0, 0, 0, 0.9);
+            border-color: var(--glass-border);
+        }
+
+        .ql-snow.ql-toolbar button:hover .ql-stroke {
+            stroke: var(--accent-primary);
+        }
+
+        .ql-snow.ql-toolbar button:hover .ql-fill {
+            fill: var(--accent-primary);
+        }
+
+        .ql-snow .ql-picker.ql-expanded .ql-picker-label .ql-stroke {
+            stroke: var(--accent-primary);
+        }
+    </style>
+</head>
+
+<body style="padding: 2rem; background: var(--bg-color); color: var(--text-primary); font-family: 'Inter', sans-serif;">
+    <div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="margin-bottom: 2rem; color: var(--accent-primary);">> CREATE BLOG POST</h2>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Dev Password</label>
+            <input type="text" id="dev-password"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Post Title</label>
+            <input type="text" id="post-title"
+                style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white;" />
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--accent-secondary);">Content</label>
+            <div id="editor" style="height: 300px; font-family: 'Inter', sans-serif; font-size: 1rem;"></div>
+        </div>
+
+        <button id="submit-btn" class="btn btn-outline" style="width: 100%;">Create Blog Post</button>
+        <p id="status-msg" style="margin-top: 1rem; color: var(--accent-primary);"></p>
+    </div>
+
+    <script>
+        const GAS_url = "https://script.google.com/macros/s/AKfycbxL5el119b_k_9jMJwuxfLRuBuU5ejLYM_jXUWRC4rlegAHjJMA9S114iQ2xYglt-WT7Q/exec";
+        class MasterDBRequest {
+            constructor(route, body) {
+                this.route = route;
+                this.masterDB = GAS_url;
+                this.requestBody = body;
+                if (typeof this.requestBody == "object") this.requestBody = JSON.stringify(this.requestBody);
+            }
+            async send() {
+                this.response = await new Promise(async (resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append("path", this.route);
+                    formData.append("body", this.requestBody);
+                    fetch(this.masterDB, { method: 'POST', body: formData })
+                        .then(response => response.json())
+                        .then(result => resolve(result))
+                        .catch(err => reject(err));
+                });
+                return this.response;
+            }
+        }
+
+        const quill = new Quill('#editor', { theme: 'snow' });
+
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const password = document.getElementById('dev-password').value;
+            const title = document.getElementById('post-title').value;
+            const contentHTML = quill.getSemanticHTML();
+            console.log(password)
+            // Format to mm/dd/yyyy manually to guarantee padding
+            const d = new Date();
+            const dateStr = [
+                (d.getMonth() + 1).toString().padStart(2, '0'),
+                d.getDate().toString().padStart(2, '0'),
+                d.getFullYear()
+            ].join('/');
+
+            if (!password || !title || !contentHTML) {
+                alert("Fill out all fields!");
+                return;
+            }
+
+            // Using btoa(unescape(encodeURIComponent())) guarantees special characters don't crash btoa
+            const encodeBase64 = (str) => btoa(unescape(encodeURIComponent(str)));
+
+            const blogObj = {
+                title: title,
+                cont: encodeBase64(contentHTML),
+                date: dateStr,
+                _id: "P" + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+
+            const req = new MasterDBRequest("addPost", {
+                password: password,
+                type: "blog",
+                data: JSON.stringify(blogObj)
+            });
+
+            document.getElementById('status-msg').textContent = "Posting...";
+            try {
+                const res = await req.send();
+                if (res.ok) {
+                    document.getElementById('status-msg').textContent = "Success!";
+                    document.getElementById('post-title').value = "";
+                    quill.setContents([{ insert: '\n' }]);
+                } else {
+                    document.getElementById('status-msg').textContent = "Failed: " + (res.error || "Unknown Error");
+                }
+            } catch (e) {
+                document.getElementById('status-msg').textContent = "Error: " + e.message;
+            }
+        });
+    </script>
+</body>
+
+</html>
