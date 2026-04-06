@@ -1,3 +1,22 @@
+function calculateAge() {
+  // Parse the birthdate string into a Date object
+  const birthDate = new Date("2008-03-10");
+  const today = new Date();
+
+  // Calculate the initial difference in years
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  // Check the difference in months
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  // If the birthday hasn't happened yet this year, subtract 1 from the age
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -157,5 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
   executeFrame();
 
 
+  $("#AGE").text(calculateAge());
 
 });

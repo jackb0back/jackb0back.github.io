@@ -223,7 +223,9 @@ function displayProjects() {
             let currentIdx = 0;
 
             carouselImg.src = images[currentIdx];
-
+            carouselImg.onclick = () => {
+                window.open(images[currentIdx], "_blank");
+            }
             if (images.length > 1) {
                 prevBtn.style.display = "block";
                 nextBtn.style.display = "block";
